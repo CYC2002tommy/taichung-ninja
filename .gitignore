@@ -1,0 +1,7 @@
+# personal layers never belong in this repo
+LOCAL.md
+config.json
+skill_routes.json
+*.log.jsonl
+__pycache__/
+*.bak-*

@@ -1,0 +1,336 @@
+{
+ "_doc": "Keyword routes for skill_router.py. Order = priority; at most max_hits routes are named per prompt. 'any' and 'not' are regexes compiled with re.I | re.ASCII, so \\b only marks ASCII word edges (CJK next to an acronym still counts as a boundary, e.g. 用MODIS). Matching skips <pasted_content> blocks and forked-session Background/Task preambles. Prefer two-part patterns (verb + noun) over bare nouns: routed skills are 3-61 KB and some open with approval gates. Edit here, then run test_skill_router.py and replay_skill_router.py. This is an EXAMPLE: copy it to ~/.claude/hooks/skill_routes.json and edit the routes to your own skills and habits.",
+ "max_hits": 5,
+ "routes": [
+  {
+   "id": "remi",
+   "skill": "hermes-research:remi",
+   "any": [
+    "審稿",
+    "peer.?review(?!ed)",
+    "模擬審查",
+    "像審稿人",
+    "嚴格審查",
+    "(檢查|挑|找).{0,6}(漏洞|弱點|邏輯問題)",
+    "站(不站|得|不)住",
+    "投稿前",
+    "用remi",
+    "remi.{0,8}(審|review|檢查)"
+   ],
+   "note": "嚴格審稿：結論站不站得住。"
+  },
+  {
+   "id": "text-humanizer",
+   "skill": "hermes-research:text-humanizer",
+   "any": [
+    "humani[sz]",
+    "text.?humanizer",
+    "AI ?(味|感|腔)",
+    "像(真)?人寫",
+    "太像 ?AI",
+    "機器味",
+    "去 ?AI ?(味|感)",
+    "(revise|polish|improve|fix|adjust) (the )?tone",
+    "\\btone\\b.{0,30}(manuscript|paper|academic|formal|natural)",
+    "reads? like a (human|real person|polished)",
+    "plain English",
+    "(maximum|max) ?\\(?B2",
+    "\\bB2.?C1\\b",
+    "\\breadability\\b",
+    "(潤飾|潤稿|潤色)",
+    "(英文|English).{0,10}(潤|改寫|改得|自然|道地|通順)",
+    "(這段|這句|段落|手稿|摘要|英文|文字|句子|內容).{0,8}(白話|通順|自然|流暢|口語|好讀)(一點|一些)?"
+   ],
+   "not": [
+    "(用|說|講|跟我).{0,4}白話.{0,4}(解釋|講|說明)",
+    "解釋給我",
+    "plain English.{0,80}\\bexplain\\b"
+   ],
+   "note": "英文改寫 B2–C1、保留引用與表格；使用者 已指定語氣（formal academic、plain English B2…）就直接照做，不再問六種風格；中文訊息改口吻不載入。"
+  },
+  {
+   "id": "stale-derivative-audit",
+   "skill": "stale-derivative-audit",
+   "any": [
+    "改名",
+    "重新命名",
+    "\\brename",
+    "搬移",
+    "移動.{0,4}(資料夾|檔案)",
+    "重新編號",
+    "renumber",
+    "換成.{0,10}(資料|模型|常數|版本)",
+    "更新.{0,6}(常數|公式|係數)"
+   ]
+  },
+  {
+   "id": "windows-scripting-discipline",
+   "skill": "windows-scripting-discipline",
+   "any": [
+    "(批次|大量|全部)(取代|替換)",
+    "(批次|大量)修改.{0,6}(檔案|檔)",
+    "find.?and.?replace",
+    "\\bregex\\b",
+    "正則",
+    "寫.{0,4}腳本",
+    "write a script",
+    "下載.{0,8}(檔案|資料集|dataset)"
+   ]
+  },
+  {
+   "id": "remote-sensing",
+   "skill": "hermes-domain:remote-sensing-agentic-workflow",
+   "any": [
+    "遙測",
+    "衛星",
+    "remote sens",
+    "satellite",
+    "\\bMODIS\\b",
+    "\\bVIIRS\\b",
+    "Landsat",
+    "Sentinel-?\\d",
+    "Earth Engine",
+    "\\bGEE\\b",
+    "\\bNDVI\\b",
+    "\\bEVI\\b",
+    "\\bFAPAR\\b",
+    "\\bAOD\\b",
+    "地球觀測",
+    "earth observation",
+    "TerraClimate",
+    "\\bERA5\\b",
+    "\\braster\\b",
+    "網格資料"
+   ],
+   "note": "23 KB 的分析流程技能，開頭要求先給藍圖再動工具；只改手稿文字、圖說或搬檔案時不載入。"
+  },
+  {
+   "id": "lca",
+   "skill": "hermes-domain:lca-modeling-workflow",
+   "any": [
+    "\\bLCA\\b",
+    "生命週期",
+    "life.?cycle assess",
+    "碳足跡",
+    "carbon footprint",
+    "ISO ?1404[04]",
+    "ISO ?14067",
+    "功能單位",
+    "functional unit",
+    "cradle.?to"
+   ]
+  },
+  {
+   "id": "ahp",
+   "skill": "hermes-domain:ahp-virtual-experts",
+   "any": [
+    "\\bAHP\\b",
+    "層級分析",
+    "Saaty",
+    "成對比較",
+    "pairwise comparison"
+   ],
+   "note": "評分前先和 使用者 校準評分標準（Saaty 1–9），不要直接評分。"
+  },
+  {
+   "id": "matlab",
+   "skill": "hermes-matlab:matlab-development",
+   "any": [
+    "matlab",
+    "exportgraphics",
+    "\\.mlx\\b"
+   ]
+  },
+  {
+   "id": "deep-science-writer",
+   "skill": "hermes-research:deep-science-writer",
+   "any": [
+    "(找|(?<!檢)查|搜|補).{0,6}文獻",
+    "文獻(回顧|探討|整理|搜尋|檢索)",
+    "literature (search|review)",
+    "研究缺口",
+    "research gap",
+    "reading list",
+    "閱讀清單",
+    "找.{0,4}(論文|paper)",
+    "positioning narrative"
+   ],
+   "note": "61 KB、每次從 Phase 0 提問開始；只檢查引用格式或對照參考文獻清單時不載入。"
+  },
+  {
+   "id": "research-grants",
+   "skill": "k-dense-science:research-grants",
+   "any": [
+    "(撰寫|申請|修改|改寫|審查|準備|寫(?!在)).{0,8}(計畫書|研究計畫)",
+    "grant proposal",
+    "(國科會|NSTC).{0,10}(申請|計畫書|徵求)"
+   ]
+  },
+  {
+   "id": "statistical-analysis",
+   "skill": "k-dense-science:statistical-analysis",
+   "any": [
+    "顯著",
+    "p.?value",
+    "假設檢定",
+    "hypothesis test",
+    "\\bt.?test",
+    "\\bANOVA\\b",
+    "變異數分析",
+    "信賴區間",
+    "confidence interval",
+    "效果量",
+    "effect size",
+    "檢定力",
+    "statistical power",
+    "無母數",
+    "nonparametric"
+   ]
+  },
+  {
+   "id": "statsmodels",
+   "skill": "k-dense-science:statsmodels",
+   "any": [
+    "迴歸",
+    "回歸",
+    "regression",
+    "\\bOLS\\b",
+    "\\bGLM\\b",
+    "線性混合模型",
+    "mixed.effects? model",
+    "\\bARIMA\\b",
+    "共線",
+    "collinear",
+    "\\bVIF\\b",
+    "binscatter",
+    "固定效應",
+    "fixed effect"
+   ]
+  },
+  {
+   "id": "scikit-learn",
+   "skill": "k-dense-science:scikit-learn",
+   "any": [
+    "機器學習",
+    "machine learning",
+    "XGBoost",
+    "random forest",
+    "隨機森林",
+    "交叉驗證",
+    "cross.?valid",
+    "\\bLOSCO\\b",
+    "超參數",
+    "hyperparameter",
+    "scikit",
+    "sklearn"
+   ]
+  },
+  {
+   "id": "shap",
+   "skill": "k-dense-science:shap",
+   "any": [
+    "\\bSHAP\\b",
+    "特徵重要",
+    "feature importance",
+    "可解釋性",
+    "explainab"
+   ]
+  },
+  {
+   "id": "uncertainty-and-units",
+   "skill": "k-dense-science:uncertainty-and-units",
+   "any": [
+    "不確定(度|性)",
+    "uncertainty",
+    "誤差傳遞",
+    "error propagation",
+    "單位換算",
+    "unit conversion",
+    "Monte Carlo",
+    "蒙地卡羅",
+    "蒙特卡羅",
+    "\\bEFAST\\b"
+   ]
+  },
+  {
+   "id": "experimental-design",
+   "skill": "k-dense-science:experimental-design",
+   "any": [
+    "實驗設計",
+    "experimental design",
+    "隨機化",
+    "randomi[sz]",
+    "區集",
+    "因子設計",
+    "factorial",
+    "樣本數",
+    "sample size",
+    "重複數",
+    "\\bDOE\\b"
+   ]
+  },
+  {
+   "id": "scientific-visualization",
+   "skill": "k-dense-science:scientific-visualization",
+   "any": [
+    "畫圖",
+    "繪圖",
+    "作圖",
+    "matplotlib",
+    "seaborn",
+    "plotly",
+    "子圖",
+    "subplot",
+    "colorbar",
+    "色階"
+   ],
+   "not": [
+    "matlab",
+    "簡報",
+    "slide",
+    "pptx",
+    "流程圖",
+    "mermaid",
+    "畫(好|過)的圖"
+   ]
+  },
+  {
+   "id": "geopandas",
+   "skill": "k-dense-science:geopandas",
+   "any": [
+    "geopandas",
+    "shapefile",
+    "\\.shp\\b",
+    "GeoJSON",
+    "spatial join",
+    "空間連接",
+    "向量圖層",
+    "行政區界"
+   ]
+  },
+  {
+   "id": "pymoo",
+   "skill": "k-dense-science:pymoo",
+   "any": [
+    "多目標",
+    "multi.?objective",
+    "帕雷托",
+    "\\bpareto\\b",
+    "\\bNSGA",
+    "基因演算法",
+    "genetic algorithm"
+   ]
+  },
+  {
+   "id": "markitdown",
+   "skill": "markitdown",
+   "any": [
+    "\\.pdf\\b"
+   ],
+   "not": [
+    "(輸出|匯出|轉成|存成|另存|export|匯成|產生).{0,8}PDF",
+    "PDF.{0,4}(輸出|匯出)"
+   ]
+  }
+ ]
+}

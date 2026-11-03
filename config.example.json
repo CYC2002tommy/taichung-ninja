@@ -1,0 +1,9 @@
+{
+  "_doc": "台中黑哥設定檔。安裝後位於 ~/.claude/commander/config.json，只留在你的電腦。每個鍵都可省略，省略就用 hook 裡的預設值。",
+  "owner": "使用者",
+  "output_review_skill": "hermes-research:remi",
+  "delegated_regex": null,
+  "delegated_label": "delegated project",
+  "private_terms": [],
+  "router_line": null
+}
